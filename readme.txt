@@ -12,10 +12,9 @@ Version: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+Simple, SEO friendly, permanent (301) and automatic redirect of 404 errors.
 
 == Description ==
-
-Simple, SEO friendly, permanent (301) and automatic redirect of 404 errors.
 
 This simple plugin - which is also WordPress network compatible - automatically redirects 404 errors to the best matching and existing content in your WordPress blog.
 The matching is based on the slug of the content not found and searches also on taxonomy pages (tags & categories). This is perfect when you have changed the permalink settings of your taxonomies.
