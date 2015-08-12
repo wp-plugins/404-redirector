@@ -30,4 +30,5 @@ Since this plugin doesn&rsquo;t need any configuration it works perfect in WordP
 
 == Changelog ==
 
-= 1.0.0 =
+= 1.0.1 =
+- Bug fixes
