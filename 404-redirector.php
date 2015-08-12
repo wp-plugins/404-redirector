@@ -11,16 +11,16 @@
  */
 
 function bfr_redirector404_currentPageURL() {
-    $pageURL = 'http';
+    //$pageURL = 'http';
     if ($_SERVER["HTTPS"] == "on") {
-		$pageURL .= "s";
+		//$pageURL .= "s";
 	}
 	$pageURL .= "://";
     if ($_SERVER["SERVER_PORT"] != "80") {
 		$pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
   	} 
     else {
-		$pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+		$pageURL .= $_SERVER["REQUEST_URI"];
 	}
 	return $pageURL;
 }
@@ -107,7 +107,7 @@ function bfr_redirector404_getTags($SlugsRaw) {
 
 /*##############################################################################                
 
-                Kalkulieren Übereinstimmung / evaluate similitary 
+                Kalkulieren ï¿½bereinstimmung / evaluate similitary 
 Parameter:
  * $SlugsRaw = the Array with the avaible Sites,Tags and Categories
  * $removeMe = the Site url
@@ -134,9 +134,13 @@ function bfr_redirector404_calc($SlugsRaw, $removeMe, $category_permalink, $tag_
             }
 
             $trimedLink = trim(str_replace( '/', '', $trimedLink ));
-                        
+                    
             //Vergleich
             $similarityLevel = levenshtein( $trimedLink, $lastUrlQueryString );
+
+            // echo 'TrimedLink= ' . $trimedLink . '<br>'; 
+            // echo 'LastURLQueryString= ' .   $lastUrlQueryString . '<br>'; 
+            // echo 'Level = ' .   $similarityLevel . '<br>_______________________________________<br>'; 
 
             array_push( $mixin, array( 'similar' => $similarityLevel, 'link' => $wholeLink ) );
     }
@@ -150,7 +154,7 @@ function bfr_redirector404_calc($SlugsRaw, $removeMe, $category_permalink, $tag_
     
 /*##############################################################################                
                 Wenn nur ein Artikel in dieser Kategorie, dann zeige diesen.
- * Für eine spätere Version
+ * Fï¿½r eine spï¿½tere Version
 */##############################################################################
 /*                                
     if (strpos($closestLink ,$category_permalink) !== false)
@@ -170,7 +174,7 @@ function bfr_redirector404_calc($SlugsRaw, $removeMe, $category_permalink, $tag_
 */              
 /*##############################################################################                
                 Wenn nur ein Artikel diesem Tag zugeordnet ist, dann zeige diesen.
- * Für eine spätere Version
+ * Fï¿½r eine spï¿½tere Version
 */##############################################################################
 /*                             
     if (strpos($closestLink ,$tag_permalink) !== false)
@@ -197,10 +201,27 @@ function bfr_redirector404_main() {
 
 		$SlugsRaw = array();			
 		$removeMe = site_url();
-		$url = bfr_redirector404_currentPageURL();
-		$lastUrlQueryString = array_pop( explode( "/", $url ) );
-                     
-                
+		$url = bfr_redirector404_currentPageURL();	
+        
+        // echo $url;
+        	
+        // $lastUrlQueryString = array_pop( explode( "/", $url ) );                
+        // 
+        // //Added to fix Bug with multiple Folders          
+        // if (strlen($lastUrlQueryString) < 3)
+        // {
+        //     $UrlQueryArray = explode( "/", $url );
+        //     $UrlQueryIndex = count($UrlQueryArray);
+        //     
+        //     // echo '<pre>';
+        //     // print_r($UrlQueryArray);
+        //     // echo '</pre>';
+        //     // 
+        //     // echo count($UrlQueryArray);
+        //     // echo $UrlQueryArray[$UrlQueryIndex];
+        //     
+        //     $lastUrlQueryString = $UrlQueryArray[$UrlQueryIndex -2];
+        // }                                   
                 //Hole alle Seiten, Kategorien und Tags / get all Pages, Categories and Tags
                 $SlugsRaw = bfr_redirector404_getPages($SlugsRaw);                
                 $SlugsRaw = bfr_redirector404_getTags($SlugsRaw);                
@@ -214,6 +235,16 @@ function bfr_redirector404_main() {
                 {
                     $tag_permalink = "tag";
                 }
+                
+                $TagRemoved = false;
+                $TagPermalinkPos = strpos($url, $tag_permalink);
+                 
+                if ($TagPermalinkPos !== false)
+                {
+                    $lastUrlQueryString = array_pop( explode( $tag_permalink, $url ) );
+                    $TagRemoved = true;
+                }
+                              
                                     
                 //Hole Kategorie Permalink / get category Permalink                              
                 $category_permalink = get_option( 'category_base' );
@@ -223,6 +254,23 @@ function bfr_redirector404_main() {
                     $category_permalink = "category";
                 }
                 
+                $categoryRemoved = false;
+                $CategoryPermalinkPos = strpos($url, $category_permalink);
+                 
+                if ($CategoryPermalinkPos !== false)
+                {
+                    $lastUrlQueryString = array_pop( explode( $CategoryPermalinkPos, $url ) );
+                    $categoryRemoved = true;
+                }
+                
+                
+                if (!$categoryRemoved && !$TagRemoved)
+                {
+                    $lastUrlQueryString = $url;
+                }
+                
+                // echo 'LastURLQueryString = ' . $lastUrlQueryString . '<br>';
+                               
                 //Hole den nahe liegesten Link / get the closest Link
                 $closestLink = bfr_redirector404_calc($SlugsRaw, $removeMe, $category_permalink, $tag_permalink, $lastUrlQueryString);
                 
