@@ -3,7 +3,7 @@
  * Plugin Name: 404 ReDirector
  * Plugin URI: www.brainfruit.com
  * Description: 
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: brainfruit
  * Author URI: www.brainfruit.com
  * Text Domain: brainfruit_redirect
