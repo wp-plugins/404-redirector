@@ -5,9 +5,9 @@ Tags: 404, redirect, 301, permanent, SEO, network, multisite, mu, multiuser, per
 Author URI: www.brainfruit.com
 Author: brainfruit
 Requires at least: 3.9
-Tested up to: 4.1
-Stable tag: 1.0.0
-Version: 1.0.0
+Tested up to: 4.2
+Stable tag: 1.0.1
+Version: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
